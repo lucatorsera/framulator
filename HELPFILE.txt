@@ -1,0 +1,28 @@
+This is the helpfile for the Framulator. It gives the guidelines in order to use the actual version of this tool.
+Framulator is a very shitty, noob level tool that roughly does audiovisual granular synthesis. The video file (only one per time, as for v0.1)
+is preloaded and later one scrambled.
+
+This tool was made for 2020 ArtScience semester project, by Luca Tornato. I am by no means a programmer, hence the weird code and probably
+non optimized algorythm.
+
+
+To prepare files:
+
+1) Split audio from video (tested .mov and .mpg too):
+	ffmpeg -input.mp4 input-audio.wav  
+
+2) Make audio mono: 
+	ffmpeg -input-audio.wav -ac 1 inputMono.wav
+
+3) Put the original video file into 'data' folder
+
+4) Put the audio file into the same folder as the Supercollider code
+
+5) Run the processing sketch first
+
+6) When frames are loaded, check the info provided by the sketch:
+	Num frames -> manually (sorry) put the same value into the 'totalNumberOfVideoFrames' variable in SC
+	Put the correct filename in the bufferRead variable
+	Evaluate s.boot, MIDICLient, b and h variables
+	
+7) Now everything is good to go. Play around with the patterns and evaluate the main code block!
