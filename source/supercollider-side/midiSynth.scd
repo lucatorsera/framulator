@@ -12,7 +12,7 @@ s.boot
 
 MIDIClient.init;      //starting midi
 
-//loading audio sample -- inputMono for bird
+//loading audio sample
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+"audio"+/+ "input.wav");
 
 //variable to store size of audio buffer
