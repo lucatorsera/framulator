@@ -12,10 +12,12 @@ s.boot
 
 MIDIClient.init;      //starting midi
 
-//loading audio sample
-b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "inputMono.wav");
+//loading audio sample -- inputMono for bird
+b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+"audio"+/+ "input.wav");
+
 //variable to store size of audio buffer
 h = b.numFrames;
+
 
 //synth to handle audio grains
 ( SynthDef(\granulator, {
@@ -45,9 +47,9 @@ h = b.numFrames;
     // TODO print devices
 var    mOut = MIDIOut.newByName("loopMIDI Port", "loopMIDI Port").latency_(Server.default.latency);
 
-var totalNumberOfVideoFrames = 480; //MUST be the same told by the processing sketch
+var totalNumberOfVideoFrames = 870; //MUST be the same told by the processing sketch
 
-var maxChan = 3; //also MUST be the same by the .pde sketch
+var maxChan = 6; //also MUST be the same by the .pde sketch
 
 var midiMax = 127; //always 127 values for pitch
 
@@ -62,14 +64,27 @@ var midiMax = 127; //always 127 values for pitch
 //---------------- MIDI PATTERNS -----------------------
 //------------------------------------------------------
 
-var notes = Pn(Prand([
-	Pseq(Array.series(exprand(1, midiMax), 0, 1), 1),
-	Pseq(Array.series(exprand(1, midiMax), 0, 1), 1),
-	Pseq(Array.series(exprand(1, midiMax), 0, 1), 1),
-	Pseq(Array.series(exprand(1, midiMax), 0, 1), 1)], 1), inf);
 
 
-var chan = Pseq([1, 1, 1, 2, 0, 1, 1], inf);
+/*
+var notes = Pn( Plazy {
+	Pseq(Array.series(rrand(2, 40), 50, 1), 1)
+});
+
+var chan = Pseq([1, 3, 5], inf);
+*/
+/*
+var notes = Pwalk(
+    Array.series(127, 0, 1),
+        // steps up to 2 in either direction, weighted toward positive
+    Pwrand([-2, -1, 0, 1, 2], [0.05, 0.1, 0.15, 1, 0.1].normalizeSum, inf),
+        // reverse direction at boundaries
+    Pseq([1, -1], inf),
+    10);
+
+var chan = Pwalk([0, 1, 2, 3, 4, 5],
+	Pwrand([0, 1, 2], [10, 1, 2].normalizeSum, inf));
+*/
 
 //------------------------------------------------------
 //------------------------------------------------------
@@ -78,11 +93,12 @@ var chan = Pseq([1, 1, 1, 2, 0, 1, 1], inf);
 // and control the frame index
 p = Pbind(
     \type, \midi,
-    \midinote, notes,
+	//\midinote, notes,   //pitches go here
+	\midinote, notes,
     \midicmd, \noteOn,
     \midiout, mOut,
-    \chan, chan,        //channels go here
-    \dur, 0.03,         //just so the video gets fast enough, emulating motion
+	\chan, chan,        //channels go here
+	\dur, 0.03,         //just so the video gets fast enough, emulating motion
 ).play;
 
 //this Pbind controls the audio grains
