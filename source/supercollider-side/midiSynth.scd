@@ -78,12 +78,11 @@ var chan = Pseq([1, 1, 1, 2, 0, 1, 1], inf);
 // and control the frame index
 p = Pbind(
     \type, \midi,
-	//\midinote, notes,   //pitches go here
-	\midinote, notes,
+    \midinote, notes,
     \midicmd, \noteOn,
     \midiout, mOut,
-	\chan, chan,        //channels go here
-	\dur, 0.03,         //just so the video gets fast enough, emulating motion
+    \chan, chan,        //channels go here
+    \dur, 0.03,         //just so the video gets fast enough, emulating motion
 ).play;
 
 //this Pbind controls the audio grains
@@ -97,20 +96,3 @@ p = Pbind(
 	\dur, 0.03,   //MUST be the same value as the video Pbind to sync audio/video
 ).play;
 )
-
-
-
-
-/////////////////////////////////////////////
-////////////// T R A S H ////////////////////
-/////////////////////////////////////////////
-
-c = Buffer.read(s, "sounds/a11wlk01.wav");  //test sample
-
-g = c.numFrames;    //number of samples in test buffer
-
-{ PlayBuf.ar(1, c, trigger: Impulse.ar(25), startPos: SinOsc.ar(50, Impulse.kr(1000))*g, loop: 1) }.play
-
-{ BufRd.ar(2, b, phase: SinOsc.ar(1, 0.5).range(0.0, b.numFrames-1), loop: 1) }.play
-
-{ BufRd.ar(2, b, phase: LFNoise1.ar(2).range(0.0,b.numFrames-1), loop: 1) }.play //pretty cool but not what I want
